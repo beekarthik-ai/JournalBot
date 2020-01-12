@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+ <head>
+   <meta charset="utf-8">
+   <title>Journal Bot</title>
+ <body>
+    <header>
+      <div class="container">
+        <h1 class="logo">Journal Bot</h1>
+        <h3>The lows probably aren't as low or as long as you think</h3>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+              {{ message }}
+            </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        <strong><nav>
+          <ul class="menu">
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('login') }}">Login</a></li>
+            <li><a href="{{ url_for('register') }}">Register</a></li>
+
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+          </ul>
+        </nav></strong>
+        {% if current_user.is_authenticated %}
+        <p>Welcome!</p>
+        <div class="">
+          <ul class="menu">
+            <li><a href="{{ url_for('journalentry') }}">Make Journal Entry</a></li>
+            <li><a href="{{ url_for('analytics') }}">See your data</a></li>
+          </ul>
+        </div>
+        {%endif%}
+
+      </div>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+
+ </body>
+</html>

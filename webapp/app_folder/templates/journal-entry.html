@@ -1,0 +1,17 @@
+{% extends "template.html" %}
+{% block content %}
+  <div >
+    <form method="POST">
+    <fieldset>
+      {{ form.csrf_token }}
+      <legend>Write and reflect about anything you want!</legend>
+      <div>
+        {{ form.text()}}
+      </div>
+      <div>
+        {{form.submit()}}
+      </div>
+    </fieldset>
+    </form>
+  </div>
+{% endblock%}
