@@ -24,7 +24,7 @@ class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators = [DataRequired()])
     remember = BooleanField('Remember Me')
-    submit = SubmitField('Login')
+    submit1 = SubmitField('Login')
 
 class JournalForm(FlaskForm):
     text = TextAreaField('Text', render_kw={"rows": 20, "cols": 70})

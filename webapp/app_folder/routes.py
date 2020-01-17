@@ -16,7 +16,7 @@ def about():
 @app.route('/journalentry', methods=['Get', 'POST'])
 def journalentry():
     if not current_user.is_authenticated:
-        return redirect(url_for('login'))
+        return redirect(url_for('register'))
     form = JournalForm()
     if form.validate_on_submit():
         text = form.text.data
@@ -54,26 +54,22 @@ def register():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     form = RegistrationForm()
-    if form.validate_on_submit():
+    form1 = LoginForm()
+
+    if form.submit.data and form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User(username=form.username.data, email=form.email.data, password=hashed_password)
         db.session.add(user)
         db.session.commit()
+        login_user(user)
         flash(f'Account created for {form.username.data} successfully! You can now login')
-        return redirect(url_for('login'))
-    return render_template('register.html', title='Register', form=form)
-
-@app.route('/login', methods=['Get', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user, remember=form.remember.data)
+        return redirect(url_for('journalentry'))
+    elif form1.validate_on_submit():
+        user = User.query.filter_by(email=form1.email.data).first()
+        if user and bcrypt.check_password_hash(user.password, form1.password.data):
+            login_user(user, remember=form1.remember.data)
             return redirect(url_for('journalentry'))
-    return render_template('login.html', title='Login', form=form)
+    return render_template('register.html', title='Register', form=form, form1=form1)
 
 @app.route('/logout')
 def logout():
